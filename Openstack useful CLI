@@ -1,0 +1,52 @@
+Openstack useful/Handy CLI tips and tricks
+
+##Openstack create new Project
+openstack project create amit_test
+
+##Openstack create new user for the project
+openstack user create --project amit_test --password <Password_to_set> <username>
+
+## Openstack assign a role to user in given project
+openstack role add --user <username> --project <ProjectName> <role_ID>
+
+## Openstack network create
+openstack network create <networkname>   ## project will be listed in the source file so it will be created in that project
+
+## Openstack subnet create
+openstack subnet create <subname> --network <netname> --subnet-range 192.168.2.0/24 --dns-nameserver <dns-nameserver-IP1> --dns-nameserver <dns-nameserver-IP2>
+
+## Openstack router create
+openstack router create <router_name>
+
+## Configure router as external gateway 
+openstack router set  <routerName> --external-gateway <External_network ID>
+
+## Configure or Add network to router. Doing this internal network can map via floating ip address(external ip) 
+openstack router add subnet <routername> <subnet_ID>
+
+## SSH Key generate in linux
+ssh-keygen -q -N "" -f <keyname>
+
+## upload or create ssh key pair in openstack
+openstack keypair create --public-key ./<name_of_publickeyfile>.pub <keynameatopenstack>
+
+## Security group rule update to allow port 22
+openstack security group rule create --proto tcp --dst-port 22 default  ## here sec group is default in which rule being added
+
+## Openstack server create or instance creation command
+openstack server create --image <image_name_or_id> --flavor <flavor_name_or_id> --nic net-id=<network_id> --key-name <key_name> <instance_name>
+
+## List server/instance running 
+openstack server list
+
+## Reserve or create floating ip
+openstack floating ip create <external_network_name>
+
+## Allocate/Assign floating ip 
+openstack server add floating ip <server_id> <floating IP>
+
+
+
+
+
+
