@@ -1,0 +1,44 @@
+##Important Handy Commands
+
+# Configure Ctrl b + H shortcut to enable session logging
+grep -q tmux.log 2>/dev/null ~/.tmux.conf || cat << _EOF >> ~/.tmux.conf
+bind-key H pipe-pane -o "exec cat >>$HOME/'#W-tmux.log'" \; display-message 'Toggled logging to $HOME/#W-tmux.log'
+_EOF
+
+#Creating new Tmux session
+tmux new -s new-session-name
+
+# To enable screen logging in tmux session and in the previous command .tmux.conf configured and use it for log session dump location
+press: Ctrl + b followed by H
+
+#TMUX session logs translation
+sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" filename_tmux.log  ## work around
+less -R <filename>  
+
+###Update SOS report or logs to Redhat
+sosreport --all-logs
+dnf install redhat-support-tool
+redhat-support-tool addattachment -c <RH CASE ID> /var/tmp/sosreport-<Servername>-<caseID>.tar.xz
+
+##ceph 4 - List OSD detail and mapping 
+podman exec -it <container-id> ceph-volume lvm list | less
+
+###ceph 4 - or Podman example
+podman  exec -it 3df8fde05b9a bash
+podman ps
+
+###List all interface in any bridge
+[root@controller~ ] # ovs-vsctl list-ifaces br-trunk
+
+####List all bridges on controller node
+[root@controller~ ] # ovs-vsctl list-br  
+
+##To check keystone health
+[root@controller~ ] # docker exec -t keystone /openstack/healthcheck ## This works with almost all containers on Red Hat Openstack
+
+###Ceph OSD full and near full values
+[root@cephmon ~]#  ceph osd dump | grep full_ratio
+full_ratio 0.95
+backfillfull_ratio 0.9
+nearfull_ratio 0.85
+
