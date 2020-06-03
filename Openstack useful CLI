@@ -45,6 +45,8 @@ openstack floating ip create <external_network_name>
 ## Allocate/Assign floating ip 
 openstack server add floating ip <server_id> <floating IP>
 
+## Openstack heat stack event runtime view. Red Hat Director command to view during stack update
+openstack stack event list <stackname> --follow
 
 
 
