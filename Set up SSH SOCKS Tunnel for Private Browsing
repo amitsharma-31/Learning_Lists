@@ -1,0 +1,49 @@
+Set up SSH SOCKS Tunnel for Private Browsing
+Set up ssh tunnel to server - This server can act as tunnel server which will give access to whole network
+
+Generally, we have jump host for environment and within that environment many things gets accessed example ILO's/DRACs any webui over 80 or 8080.
+Those things can be accessed using this below tunnel mechanism.
+
+Tunnel port (port 9090 in our below example) will be used and execute remote call/connection with that target IP and port
+
+# ssh -N -D 9090 [USER]@[SERVER_IP]
+  -N - Tells SSH not to execute a remote command.
+  -D 9090 - Opens a SOCKS tunnel on the specified port number.
+  [USER]@[SERVER_IP] - Your remote SSH user and server IP address.
+  To run the command in the background use the -f option.
+
+If using putty instead of ssh client
+  Under the Connection menu, expand SSH and select Tunnels. Enter the port 9090 in the Source Port field, and check the Dynamic radio button.
+  Click on the Add button as shown in the image below.
+
+Now configure firefox to access those Web UI's
+
+01. In the upper right-hand corner, click on the hamburger icon ☰ to open Firefox’s menu:
+
+02. Click on the ⚙ Preferences link.
+
+03. Scroll down to the Network Settings section and click on the Settings... button.
+
+04. A new window will open.
+    Select the Manual proxy configuration radio button.
+    Enter 127.0.0.1 in the SOCKS Host field and 9090 in the Port field.
+    Check the Proxy DNS when using SOCKS v5 checkbox.
+    Click on the OK button to save the settings.
+
+Google Chrome
+ Linux:- 
+ /usr/bin/google-chrome \
+    --user-data-dir="$HOME/proxy-profile" \
+    --proxy-server="socks5://localhost:9090"
+ 
+ macOS:
+ "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --user-data-dir="$HOME/proxy-profile" \
+    --proxy-server="socks5://localhost:9090"
+
+ Windows:-
+ "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" ^
+    --user-data-dir="%USERPROFILE%\proxy-profile" ^
+    --proxy-server="socks5://localhost:9090"
+
+Now after this try to access those Web UI's and using tunnel you can reach to those WebUIs
