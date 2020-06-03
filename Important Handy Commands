@@ -42,3 +42,39 @@ full_ratio 0.95
 backfillfull_ratio 0.9
 nearfull_ratio 0.85
 
+## SED replace example Search and replace in same file
+## SSHD file allow root login and root login using password 
+sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/; s/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/; s/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+## SSH Tunneling command
+ssh -L LocalhostIP:Local_port:<RemoteHost>:<RemotePort> root@<localhostIP>
+ssh -L 192.168.2.10:8181:172.29.236.100:8181 root@192.168.2.10  ## Example
+
+## Iptables pre routing rules   ## used in hosts to connect with containers on remote host
+iptables -t nat -A PREROUTING -i ens3 -p tcp --dport 11211 -j DNAT --to <ContainerIP>:11211   ##Anything coming inside on 11211 will be redirected to container ip and port 11211
+iptables -t nat -A OUTPUT -p tcp -d 172.29.236.0/22 -j DNAT --to-destination <host_IP_have_containers>   ###Anything related to containers series will be redirected to the ip of that host running container
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+##########################################################################################################################
+##Examples##
+On controller nodes 
+root@aio1:~# iptables -t nat -A PREROUTING -i ens3 -p tcp --dport 11211 -j DNAT --to 172.29.237.197:11211
+
+ iptables -t nat -A PREROUTING -i ens3 -p tcp --dport 5671 -j DNAT --to 172.29.236.145:5671
+iptables -t nat -A PREROUTING -i ens3 -p tcp --dport 8181 -j DNAT --to 172.29.236.100:8181
+
+On compute nodes
+iptables -t nat -A OUTPUT -p tcp -d 172.29.236.100 -j DNAT --to-destination 192.168.2.10
+iptables -t nat -A OUTPUT -p tcp -d 172.29.237.197 -j DNAT --to-destination 192.168.2.10
+iptables -t nat -A OUTPUT -p tcp -d 172.29.236.0/22 -j DNAT --to-destination 192.168.2.10
+##########################################################################################################################
+
+## Password command to set in same command line
+useradd test && echo "password" | passwd test --stdin
+
+## Setting up sudo via cli
+echo "test ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/test-user
+
+## Configuring sysconfig network script to not update dns nameservers (resolve.conf file)
+echo "PEERDNS=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+
