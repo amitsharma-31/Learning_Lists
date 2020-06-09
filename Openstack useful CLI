@@ -48,6 +48,77 @@ openstack server add floating ip <server_id> <floating IP>
 ## Openstack heat stack event runtime view. Red Hat Director command to view during stack update
 openstack stack event list <stackname> --follow
 
+## openstack to see list of docker container running in different format
+docker ps
+docker ps -a --format="{{.Names}}\t{{.Status}}" 
+docker ps --filter status=running --format="{{.ID}}\t{{.Names}}\t{{.Status}}"
+docker inspect cinder_api |jq .[0].Mounts
+
+## Checking any value set in any section of config file. Crudini get or set is used. In below example keystone config file in docker container section DEFAULT debug value is being questioned
+docker exec -u root keystone crudini --get /etc/keystone/keystone.conf DEFAULT debug
+
+###  To check keystone health or similar way most openstack container services reponsds  the status
+root@controller~ ] # docker exec -t keystone /openstack/healthcheck
+
+### To list all the ovs bridges configured on controller 
+root@controller~ ] # ovs-vsctl list-br  (list all bridges on controller node)
+
+### To list all the interfaces in trunk bridge of ovs (br-trunk)
+root@controller~ ] # ovs-vsctl list-ifaces br-trunk
+
+####Ulimit value for any docker 
+docker container inspect -f "{{.HostConfig.Ulimits}}" nova_compute | less
+
+####  Shutdown Overcloud (Openstack) for any specific reason/requirement
+	• Shutdown the workload
+		○ $ssh director
+		○ $source ~/overcloudrc
+		○ $openstack server list --all-projects
+		○ $openstack server stop <instance -ids>  (repeat with all instances ids)
+	• Now turn for Overcloud setup
+		○ $source ~/stackrc
+		○ $openstack server list -c Name -c Status -c Networks
+		○ Verify no workload on compute (virsh list --all)
+		○ $ssh compute1; poweroff
+	• Now turn for ceph environment (if ceph is totally different and Mon service is also on dedicated servers not on controller nodes) than it is independent
+		○ #ssh controller0
+		○ #ceph osd set noout
+		○ #ceph osd set norecover
+		○ #ceph osd set norebalance
+		○ #ceph osd set nobackfill
+		○ #ceph osd set nodown
+		○ #ceph osd set pause
+		○ Shutdown osd nodes
+		○ Shutdown MON,MDS services
+	• Controller nodes shutdown
+		○ $sudo pcs cluster stop --all
+		○ Poweroff cluster nodes
+
+###Start order of overcloud (prod openstack) deployment
+	• Start the ceph osds nodes again if ceph is totally independent that better to keep it up first separately and then openstack setup
+		○ $source stackrc
+		○ $openstack compute service list -c Binary -c Status -c State
+		○ $openstack baremetal node list -c Name -c "Power State"
+		○ $openstack baremetal node power on controller0
+		○ $ssh controller0
+		○ $sudo pcs cluster start --all
+		○ $sudo ceph osd unset noout
+		○ $sudo ceph osd unset norecover
+		○ $sudo ceph osd unset norebalance
+		○ $sudo ceph osd unset nobackfill
+		○ $sudo ceph osd unset nodown
+		○ $sudo ceph osd unset pause
+	• Start the compute nodes
+		○ $openstack baremetal node power on compute0
+		○ $openstack baremetal node power on compute1
+		○ $openstack baremetal node power on computehci0
+
+###checking nova ulimit, container based#### 
+source ~/stackrc
+export TRIPLEO_PLAN_NAME=$(openstack stack list -c 'Stack Name' -f value)
+ansible -bi /usr/bin/tripleo-ansible-inventory Compute -m shell -a "docker container inspect -f '{''{.HostConfig.Ulimits}''}' nova_compute"
+
+###Mariadb Galera sync status check
 
 
 
