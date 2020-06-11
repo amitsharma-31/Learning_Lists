@@ -26,6 +26,8 @@ openstack router add subnet <routername> <subnet_ID>
 
 ## SSH Key generate in linux
 ssh-keygen -q -N "" -f <keyname>
+###Openstack new image create in glance
+openstack image create --disk-format qcow2 --container-format bare --public --file ./cirros-0.5.1-x86_64-disk.img cirros
 
 ## upload or create ssh key pair in openstack
 openstack keypair create --public-key ./<name_of_publickeyfile>.pub <keynameatopenstack>
