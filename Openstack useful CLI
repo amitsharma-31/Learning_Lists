@@ -44,6 +44,9 @@ openstack server create --image centos7 --flavor m1.tiny  --availability-zone no
 ## List server/instance running 
 openstack server list
 
+### Disabling volume service cinder-volume##
+openstack volume service set --disable aio1@lvm cinder-volume
+
 ## Reserve or create floating ip
 openstack floating ip create <external_network_name>
 
