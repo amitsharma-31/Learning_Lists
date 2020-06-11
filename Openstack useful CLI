@@ -38,6 +38,9 @@ openstack security group rule create --proto tcp --dst-port 22 default  ## here 
 ## Openstack server create or instance creation command
 openstack server create --image <image_name_or_id> --flavor <flavor_name_or_id> --nic net-id=<network_id> --key-name <key_name> <instance_name>
 
+## Openstack server create or instance creation command on specific compute host
+openstack server create --image centos7 --flavor m1.tiny  --availability-zone nova:<computehostname> --nic net-id=<networname> <instancename>
+
 ## List server/instance running 
 openstack server list
 
