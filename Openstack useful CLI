@@ -129,5 +129,11 @@ ansible -bi /usr/bin/tripleo-ansible-inventory Compute -m shell -a "docker conta
 ###Mariadb Galera sync status check
 
 
+Live migration status 
+
+nova server-migration-list test_09Jul20
+nova migration-list  |grep compute111 |grep 2020-07-09
+
+nova server-migration-show c145cf5d-3a99-4e4a-9c0e-ea8056970264 ID
 
 
