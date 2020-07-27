@@ -40,8 +40,8 @@ only install the @Base package group
     success
     
 ## Satellite Health or Services status check
- [root@satellite ~# satellite-maintain service list
- [root@satellite ~# satellite-maintain health check
+ [root@satellite ~# satellite-maintain service list ###To verify the status of satellite services
+ [root@satellite ~# satellite-maintain health check ###various health checks in the Satellite Server installation
 
 ## Before you create your manifest, consider the following:
 	• Include the Satellite Server subscription in the manifest if planning a disconnected Red Hat Satellite installation. <br>
@@ -66,3 +66,41 @@ Modify and update the manifest for any organization to include additional infras
 | /var/log/foreman/db_migrate.log | |
 | /var/log/foreman/*startup.log | |
 | /usr/share/foreman/tmp/pids/dynflow_executor.output | Useful if the foreman-tasks service fails to start |
+
+## To reset password of satellite in case you forgot it
+foreman-rake permissions:reset   # This will randomly set any password
+
+## Satellite repository download policy can be set as default (on_demand, immediate, background)
+
+## HAMMER CLI Setup
+--------------------------------------------------------------------------------------------------------------------------------
+[root@satellite6 ~]# cat >> /root/.bashrc <<EOF 
+> export ORG='TEST_ORG'
+> export LOCATION='NCR' 
+> export ORGLABEL='TEST_ORG' 
+> EOF 
+[root@satellite6 ~]# source /root/.bashrc
+
+[root@satellite6 ~]# cat >> ~/.hammer/cli.modules.d/foreman.yml <<EOF 
+>   :host: 'https://satellite6.example.com'    #####Check the allignment##
+> EOF 
+[root@satellite6 ~]# cat ~/.hammer/cli.modules.d/foreman.yml
+
+hammer -u <USER> -p <PASSWORD> subscription upload --file manifest.zip --organization "Default_Organization"
+
+[root@satellite6 ~]# hammer subscription list --organization OpenTLC
+---|------|------|------|----------|---------|---------|----------|----------|---------
+ID | UUID | NAME | TYPE | CONTRACT | ACCOUNT | SUPPORT | END DATE | QUANTITY | CONSUMED
+---|------|------|------|----------|---------|---------|----------|----------|---------
+
+[root@satellite6 ~]# hammer subscription upload --file Sat6_Class_manifest.zip --organization "OpenTLC"
+warning: Overriding "Content-Type" header "multipart/form-data" with "multipart/form-data; boundary=----RubyFormBoundaryIep843W1bLNARYqJ" due to payload
+[....................................................................................................................................................................................] [100%]
+[root@satellite6 ~]# hammer subscription list --organization OpenTLC
+---|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|---------
+ID | UUID                             | NAME                                    | TYPE     | CONTRACT | ACCOUNT | SUPPORT      | END DATE            | QUANTITY | CONSUMED
+---|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|---------
+2  | 40288094737a092601737a2ee7a23326 | Employee SKU                            | Physical | 11546081 | 6057187 | Self-Support | 2021/01/01 04:59:59 | 1        | 0
+1  | 40288094737a092601737a2ea1fd3321 | Red Hat Satellite Employee Subscription | Physical | 11552742 | 6057187 | Self-Support | 2021/01/01 04:59:59 | 1        | 0
+---|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|---------
+
