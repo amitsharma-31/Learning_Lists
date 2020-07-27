@@ -93,9 +93,9 @@ hammer -u <USER> -p <PASSWORD> subscription upload --file manifest.zip --organiz
 ID | UUID | NAME | TYPE | CONTRACT | ACCOUNT | SUPPORT | END DATE | QUANTITY | CONSUMED
 ---|------|------|------|----------|---------|---------|----------|----------|---------
 
-[root@satellite6 ~]# hammer subscription upload --file Sat6_Class_manifest.zip --organization "OpenTLC"
-warning: Overriding "Content-Type" header "multipart/form-data" with "multipart/form-data; boundary=----RubyFormBoundaryIep843W1bLNARYqJ" due to payload
-[....................................................................................................................................................................................] [100%]
+[root@satellite6 ~]# hammer subscription upload --file Sat6_Class_manifest.zip --organization "OpenTLC" <br>
+warning: Overriding "Content-Type" header "multipart/form-data" with "multipart/form-data; boundary=----RubyFormBoundaryIep843W1bLNARYqJ" due to payload <br>
+[....................................................................................................................................................................................] [100%] <br>
 [root@satellite6 ~]# hammer subscription list --organization OpenTLC
 ---|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|---------
 ID | UUID                             | NAME                                    | TYPE     | CONTRACT | ACCOUNT | SUPPORT      | END DATE            | QUANTITY | CONSUMED
