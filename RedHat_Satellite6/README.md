@@ -72,6 +72,8 @@ foreman-rake permissions:reset   # This will randomly set any password
 
 ## Satellite repository download policy can be set as default (on_demand, immediate, background)
 
+## Searchquery in remote execution :- 
+name = satclient.example.com
 ## HAMMER CLI Setup
 --------------------------------------------------------------------------------------------------------------------------------
 [root@satellite6 ~]# cat >> /root/.bashrc <<EOF 
