@@ -96,11 +96,11 @@ ID | UUID | NAME | TYPE | CONTRACT | ACCOUNT | SUPPORT | END DATE | QUANTITY | C
 [root@satellite6 ~]# hammer subscription upload --file Sat6_Class_manifest.zip --organization "OpenTLC" <br>
 warning: Overriding "Content-Type" header "multipart/form-data" with "multipart/form-data; boundary=----RubyFormBoundaryIep843W1bLNARYqJ" due to payload <br>
 [....................................................................................................................................................................................] [100%] <br>
-[root@satellite6 ~]# hammer subscription list --organization OpenTLC
+[root@satellite6 ~]# hammer subscription list --organization OpenTLC <br>
 ---|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|---------
 ID | UUID                             | NAME                                    | TYPE     | CONTRACT | ACCOUNT | SUPPORT      | END DATE            | QUANTITY | CONSUMED
 ---|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|---------
 2  | 40288094737a092601737a2ee7a23326 | Employee SKU                            | Physical | 11546081 | 6057187 | Self-Support | 2021/01/01 04:59:59 | 1        | 0
 1  | 40288094737a092601737a2ea1fd3321 | Red Hat Satellite Employee Subscription | Physical | 11552742 | 6057187 | Self-Support | 2021/01/01 04:59:59 | 1        | 0
----|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|---------
+---|----------------------------------|-----------------------------------------|----------|----------|---------|--------------|---------------------|----------|--------- <br>
 
