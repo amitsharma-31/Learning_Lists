@@ -1,8 +1,8 @@
 ## Hardware Requirements
-The Red Hat Satellite 6 host must meet the following minimum hardware specifications:
-	• x86_64 architecture.
-	• Minimum of four 2.0 GHz CPU cores.
-	• Minimum of 20 GB of physical memory, and a minimum of 4 GB of swap space.
+The Red Hat Satellite 6 host must meet the following minimum hardware specifications: <br>
+	• x86_64 architecture.<br>
+	• Minimum of four 2.0 GHz CPU cores.<br>
+	• Minimum of 20 GB of physical memory, and a minimum of 4 GB of swap space.<br>
 
 ## SW/OS Requirements
 only install the @Base package group
