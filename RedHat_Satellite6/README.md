@@ -99,12 +99,12 @@ warning: Overriding "Content-Type" header "multipart/form-data" with "multipart/
 [root@satellite6 ~]# hammer subscription list --organization OpenTLC <br>
 ![image](https://user-images.githubusercontent.com/42198424/88528113-d2f22380-d01b-11ea-80ba-8ed8576f2aec.png)
 
-[root@satellite6 ~]# hammer task info --id d2907880-bb5b-4854-8aad-a89dfb16ebef    (Equal to satellite dashboard monitor -> task and selecting any task for detail)
-ID:          d2907880-bb5b-4854-8aad-a89dfb16ebef
-Action:      Create organization {"text"=>"organization 'OpenTLC'", "link"=>"/organizations/1/edit"}
-State:       stopped
-Result:      success
-Started at:  2020/07/22 13:43:01
-Ended at:    2020/07/22 13:43:27
-Owner:       foreman_api_admin
-Task errors:
+[root@satellite6 ~]# hammer task info --id d2907880-bb5b-4854-8aad-a89dfb16ebef    (Equal to satellite dashboard monitor -> task and selecting any task for detail) <br>
+ID:          d2907880-bb5b-4854-8aad-a89dfb16ebef <br>
+Action:      Create organization {"text"=>"organization 'OpenTLC'", "link"=>"/organizations/1/edit"} <br>
+State:       stopped <br>
+Result:      success <br>
+Started at:  2020/07/22 13:43:01 <br>
+Ended at:    2020/07/22 13:43:27 <br>
+Owner:       foreman_api_admin <br>
+Task errors: <br>
