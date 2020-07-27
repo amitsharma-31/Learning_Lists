@@ -52,3 +52,16 @@ Modify and update the manifest for any organization to include additional infras
 ## Sample Reference Architecture for huge setup
 ![alt text](https://user-images.githubusercontent.com/42198424/88525836-c3251000-d018-11ea-96b2-a3e46dfd491c.png)
 
+## Troubleshoot issues 
+[satellite]# sosreport
+[satellite]# foreman-debug
+
+## Logs files and clues
+| Log path | What to look for  |
+| :---:   | :-: | 
+| /var/log/messages | "ERROR" |
+| /var/log/katello-installer/* | "ERROR" |
+| /var/log/tomcat6/catalina.out | Java tracebacks |
+| /var/log/foreman/db_migrate.log | |
+| /var/log/foreman/*startup.log | |
+| /usr/share/foreman/tmp/pids/dynflow_executor.output | Useful if the foreman-tasks service fails to start |
