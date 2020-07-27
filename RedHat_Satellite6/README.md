@@ -155,3 +155,140 @@ katello-package-upload  ###In case katello agent status in the host->content hos
 
 ## Satellite Deployment Command
 satellite-installer --foreman-initial-organization TEST_ORG <br> --foreman-initial-location NCR <br> --scenario satellite <br> --foreman-proxy-tftp true <br> --foreman-proxy-dhcp true <br> --foreman-proxy-dhcp-gateway "192.168.0.2" <br> --foreman-proxy-dhcp-interface "eth0" <br> --foreman-proxy-dhcp-range "192.168.0.200 192.168.0.250" <br> --foreman-proxy-dns true <br> --foreman-proxy-dns-forwarders "192.168.0.10" <br> --foreman-proxy-dns-interface "eth0" <br> --foreman-proxy-dns-reverse 0.168.192.in-addr.arpa <br> --foreman-proxy-dns-server "127.0.0.1" <br> --foreman-proxy-dns-zone "example.com" <br> --foreman-admin-password 'redhat'
+
+## Satellite server backup & restore :- https://access.redhat.com/solutions/1595963
+[root@satellite6 ~]# satellite-maintain backup offline /var/backup_directory
+Starting backup: 2020-07-25 18:09:51 +0200
+Running preparation steps required to run the next scenarios
+================================================================================
+Make sure Foreman DB is up:
+/ Checking connection to the Foreman DB                               [OK]
+--------------------------------------------------------------------------------
+
+
+Running Backup
+================================================================================
+Confirm turning off services is allowed:
+WARNING: This script will stop your services.
+
+Do you want to proceed?, [y(yes), q(quit)] y
+                                                                      [OK]
+--------------------------------------------------------------------------------
+Prepare backup Directory:
+Creating backup folder /var/backup_directory/satellite-backup-2020-07-25-18-09-51
+                                                                      [OK]
+--------------------------------------------------------------------------------
+Check if the directory exists and is writable:                        [OK]
+--------------------------------------------------------------------------------
+Generate metadata:
+| Saving metadata to metadata.yml                                     [OK]
+--------------------------------------------------------------------------------
+Backup config files:
+| Collecting config files to backup                                   [OK]
+--------------------------------------------------------------------------------
+Turn on maintenance mode:                                             [OK]
+--------------------------------------------------------------------------------
+Stop applicable services:
+Stopping the following service(s):
+
+rh-mongodb34-mongod, postgresql, qdrouterd, qpidd, squid, pulp_celerybeat, pulp_resource_manager, pulp_streamer, pulp_workers, smart_proxy_dynflow_core, tomcat, dynflowd, httpd, puppetserver, foreman-proxy
+- All services stopped                                                [OK]
+--------------------------------------------------------------------------------
+Backup Pulp data:
+| Collecting Pulp data                                                [OK]
+--------------------------------------------------------------------------------
+Backup mongo offline:
+\ Collecting Mongo data                                               [OK]
+--------------------------------------------------------------------------------
+Backup Candlepin DB offline:
+\ Collecting data from /var/lib/pgsql/data/                           [OK]
+--------------------------------------------------------------------------------
+Backup Foreman DB offline:
+Already done                                                          [OK]
+--------------------------------------------------------------------------------
+Start applicable services:
+Starting the following service(s):
+
+rh-mongodb34-mongod, postgresql, qdrouterd, qpidd, squid, pulp_celerybeat, pulp_resource_manager, pulp_streamer, pulp_workers, smart_proxy_dynflow_core, tomcat, dynflowd, httpd, puppetserver, foreman-proxy
+- All services started                                                [OK]
+--------------------------------------------------------------------------------
+Turn off maintenance mode:                                            [OK]
+--------------------------------------------------------------------------------
+Compress backup data to save space:
+\ Compressing backup of Postgress DB
+- Compressing backup of Mongo DB                                      [OK]
+--------------------------------------------------------------------------------
+
+Done with backup: 2020-07-25 18:20:15 +0200
+**** BACKUP Complete, contents can be found in: /var/backup_directory/satellite-backup-2020-07-25-18-09-51 ****
+
+## Uninstall Satellite Steps
+
+## Satellite restoration from backup :- I simulated  the running and configured setup by running "katello-remove"
+
+We need to ensure time sync, selinux configured properly as it was earlier, hostname & host file is setup as previous, install satellite and puppetserver start puppetserver service
+yum install satellite; yum install puppetserver; systemctl start puppetserver  (same version of packages)
+
+[root@satellite6 ~]# satellite-maintain restore /var/backup_directory/satellite-backup-2020-07-25-18-09-51
+Running Restore backup
+================================================================================
+Check if command is run as root user:                                 [OK]
+--------------------------------------------------------------------------------
+Validate backup has appropriate files:                                [OK]
+--------------------------------------------------------------------------------
+Confirm dropping databases and running restore:
+
+WARNING: This script will drop and restore your database.
+Your existing installation will be replaced with the backup database.
+Once this operation is complete there is no going back.
+Do you want to proceed?, [y(yes), q(quit)] y
+                                                                      [OK]
+--------------------------------------------------------------------------------
+Validate hostname is the same as backup:
+                             [OK]
+--------------------------------------------------------------------------------
+Setting file security:
+| Restoring SELinux context                                           [OK]
+--------------------------------------------------------------------------------
+Restore configs from backup:
+\ Restoring configs                                                   [OK]
+--------------------------------------------------------------------------------
+Ensure restored MongoDB storage engine matches the current DB:        [OK]
+--------------------------------------------------------------------------------
+Run installer reset:
+\ Installer reset
+\ Installer reset                                                     [OK]
+--------------------------------------------------------------------------------
+Stop applicable services:
+Stopping the following service(s):
+
+rh-mongodb34-mongod, postgresql, qdrouterd, qpidd, squid, pulp_celerybeat, pulp_resource_manager, pulp_streamer, pulp_workers, smart_proxy_dynflow_core, tomcat, dynflowd, httpd, puppetserver, foreman-proxy
+/ All services stopped                                                [OK]
+--------------------------------------------------------------------------------
+Extract any existing tar files in backup:
+/ Extracting pgsql data                                               [OK]
+--------------------------------------------------------------------------------
+Migrate pulp db:
+| Migrating pulp database                                             [OK]
+--------------------------------------------------------------------------------
+Start applicable services:
+Starting the following service(s):
+
+rh-mongodb34-mongod, postgresql, qdrouterd, qpidd, squid, pulp_celerybeat, pulp_resource_manager, pulp_streamer, pulp_workers, smart_proxy_dynflow_core, tomcat, dynflowd, httpd, puppetserver, foreman-proxy
+/ All services started                                                [OK]
+--------------------------------------------------------------------------------
+Run daemon reload:                                                    [OK]
+--------------------------------------------------------------------------------
+[root@satellite6 ~]# satellite-maintain health check
+Running ForemanMaintain::Scenario::FilteredScenario
+================================================================================
+Check for verifying syntax for ISP DHCP configurations:               [OK]
+--------------------------------------------------------------------------------
+Check whether all services are running:                               [OK]
+--------------------------------------------------------------------------------
+Check whether all services are running using hammer ping:             [OK]
+--------------------------------------------------------------------------------
+Check for paused tasks:                                               [OK]
+--------------------------------------------------------------------------------
+
+[root@satellite6 ~]#
