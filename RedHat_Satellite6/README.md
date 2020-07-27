@@ -50,5 +50,5 @@ only install the @Base package group
 Modify and update the manifest for any organization to include additional infrastructure subscriptions. Do not delete the active manifests in your Satellite installation from the Red Hat Customer Portal, because doing so will unregister all your hosts. <br>
 
 ## Sample Reference Architecture for huge setup
-
+https://user-images.githubusercontent.com/42198424/88525836-c3251000-d018-11ea-96b2-a3e46dfd491c.png
 
