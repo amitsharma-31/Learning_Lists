@@ -157,13 +157,13 @@ katello-package-upload  ###In case katello agent status in the host->content hos
 satellite-installer --foreman-initial-organization TEST_ORG <br> --foreman-initial-location NCR <br> --scenario satellite <br> --foreman-proxy-tftp true <br> --foreman-proxy-dhcp true <br> --foreman-proxy-dhcp-gateway "192.168.0.2" <br> --foreman-proxy-dhcp-interface "eth0" <br> --foreman-proxy-dhcp-range "192.168.0.200 192.168.0.250" <br> --foreman-proxy-dns true <br> --foreman-proxy-dns-forwarders "192.168.0.10" <br> --foreman-proxy-dns-interface "eth0" <br> --foreman-proxy-dns-reverse 0.168.192.in-addr.arpa <br> --foreman-proxy-dns-server "127.0.0.1" <br> --foreman-proxy-dns-zone "example.com" <br> --foreman-admin-password 'redhat'
 
 ## Satellite server backup & restore :- https://access.redhat.com/solutions/1595963
-`[root@satellite6 ~]# satellite-maintain backup offline /var/backup_directory
+```[root@satellite6 ~]# satellite-maintain backup offline /var/backup_directory
 Starting backup: 2020-07-25 18:09:51 +0200
 Running preparation steps required to run the next scenarios
 ================================================================================
 Make sure Foreman DB is up:
 / Checking connection to the Foreman DB                               [OK]
---------------------------------------------------------------------------------
+--------------------------------------------------------------------------------``
 
 
 Running Backup
@@ -205,7 +205,7 @@ Backup Candlepin DB offline:
 --------------------------------------------------------------------------------
 Backup Foreman DB offline:
 Already done                                                          [OK]
---------------------------------------------------------------------------------`
+--------------------------------------------------------------------------------``
 Start applicable services:
 Starting the following service(s):
 
@@ -220,7 +220,7 @@ Compress backup data to save space:
 --------------------------------------------------------------------------------
 
 Done with backup: 2020-07-25 18:20:15 +0200
-`**** BACKUP Complete, contents can be found in: /var/backup_directory/satellite-backup-2020-07-25-18-09-51 ****`
+``**** BACKUP Complete, contents can be found in: /var/backup_directory/satellite-backup-2020-07-25-18-09-51 ****```
 
 ## Uninstall Satellite Steps
 ![image](https://user-images.githubusercontent.com/42198424/88529260-5e1fe900-d01d-11ea-8769-2147a86d5815.png)
@@ -230,7 +230,7 @@ Done with backup: 2020-07-25 18:20:15 +0200
 We need to ensure time sync, selinux configured properly as it was earlier, hostname & host file is setup as previous, install satellite and puppetserver start puppetserver service
 yum install satellite; yum install puppetserver; systemctl start puppetserver  (same version of packages)
 
-`[root@satellite6 ~]# satellite-maintain restore /var/backup_directory/satellite-backup-2020-07-25-18-09-51
+```[root@satellite6 ~]# satellite-maintain restore /var/backup_directory/satellite-backup-2020-07-25-18-09-51
 Running Restore backup
 ================================================================================
 Check if command is run as root user:                                 [OK]
@@ -292,4 +292,4 @@ Check whether all services are running using hammer ping:             [OK]
 Check for paused tasks:                                               [OK]
 --------------------------------------------------------------------------------
 
-[root@satellite6 ~]#`
+[root@satellite6 ~]#```
