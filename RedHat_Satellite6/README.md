@@ -1,6 +1,6 @@
 # RedHat Satellite 6 Deployment and relevant Notes
 
-# Special/Important things to consider before deployment
+## Special/Important things to consider before deployment
 
 Satellite will run with Integrated database or External Database? <br>
 In case of external who will manage or configure/tune the External DB ####This is good if DBA's available to manage MongoDB & Postgress mgmt & availability <br>
@@ -11,6 +11,7 @@ Time Sync/Chrony service should be configured and running on satellite with trus
 Hostname considerations (better to keep it only 3 level domain. eg xyz.companydomain.com or satellite.companydomain.com <br>
 Number of nodes to manage as this will introduce to plan for seperate capsule server (Better choice to split into multiple capsule rather external DB) <br>
 Would you be using satellite to run containers infra?? If yes, then need container registry internal or external access via satellite## IMPORTANT  <br> 
+DNS localhost resolution should properly work #ping -c1 localhost and #ping -c1 $(hostname -f) <br>
 
 ## Hardware Requirements
 The Red Hat Satellite 6 host must meet the following minimum hardware specifications: <br>
