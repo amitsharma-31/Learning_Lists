@@ -1,3 +1,17 @@
+# RedHat Satellite 6 Deployment and relevant Notes
+
+# Special/Important things to consider before deployment
+
+Satellite will run with Integrated database or External Database? <br>
+In case of external who will manage or configure/tune the External DB ####This is good if DBA's available to manage MongoDB & Postgress mgmt & availability <br>
+HW Considerations <br>
+OS Considerations <br>
+Firewall Considerations <br>
+Time Sync/Chrony service should be configured and running on satellite with trusted NTP source <br>
+Hostname considerations (better to keep it only 3 level domain. eg xyz.companydomain.com or satellite.companydomain.com <br>
+Number of nodes to manage as this will introduce to plan for seperate capsule server (Better choice to split into multiple capsule rather external DB) <br>
+Would you be using satellite to run containers infra?? If yes, then need container registry internal or external access via satellite## IMPORTANT  <br> 
+
 ## Hardware Requirements
 The Red Hat Satellite 6 host must meet the following minimum hardware specifications: <br>
 	• x86_64 architecture.<br>
@@ -27,3 +41,14 @@ only install the @Base package group
 ## Satellite Health or Services status check
  [root@satellite ~# satellite-maintain service list
  [root@satellite ~# satellite-maintain health check
+
+## Before you create your manifest, consider the following:
+	• Include the Satellite Server subscription in the manifest if planning a disconnected Red Hat Satellite installation. <br>
+	• Include subscriptions for all Red Hat Satellite Capsule Servers. <br>
+	• Include subscriptions for all Red Hat products to manage with Red Hat Satellite. <br>
+	• Plan in advance the manifest renewals based on their expiration dates, and use the future-dated subscriptions to ease this process. <br>
+Modify and update the manifest for any organization to include additional infrastructure subscriptions. Do not delete the active manifests in your Satellite installation from the Red Hat Customer Portal, because doing so will unregister all your hosts. <br>
+
+## Sample Reference Architecture for huge setup
+
+
