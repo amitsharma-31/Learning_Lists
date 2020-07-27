@@ -293,3 +293,71 @@ Check for paused tasks:                                               [OK]
 --------------------------------------------------------------------------------
 
 [root@satellite6 ~]#```
+
+## Satellite restoration from backup :- I simulated  the running and configured setup by running "katello-remove"
+We need to ensure time sync, selinux configured properly as it was earlier, hostname & host file is setup as previous, install satellite and puppetserver start puppetserver service
+yum install satellite; yum install puppetserver; systemctl start puppetserver  (same version of packages)
+
+[root@satellite6 ~]# satellite-maintain restore /var/backup_directory/satellite-backup-2020-07-25-18-09-51
+Running Restore backup
+================================================================================
+Check if command is run as root user:                                 [OK]
+--------------------------------------------------------------------------------
+Validate backup has appropriate files:                                [OK]
+--------------------------------------------------------------------------------
+Confirm dropping databases and running restore:
+
+WARNING: This script will drop and restore your database.
+Your existing installation will be replaced with the backup database.
+Once this operation is complete there is no going back.
+Do you want to proceed?, [y(yes), q(quit)] y
+                                                                      [OK]
+--------------------------------------------------------------------------------
+Validate hostname is the same as backup:
+                             [OK]
+--------------------------------------------------------------------------------
+Setting file security:
+| Restoring SELinux context                                           [OK]
+--------------------------------------------------------------------------------
+Restore configs from backup:
+\ Restoring configs                                                   [OK]
+--------------------------------------------------------------------------------
+Ensure restored MongoDB storage engine matches the current DB:        [OK]
+--------------------------------------------------------------------------------
+Run installer reset:
+\ Installer reset
+\ Installer reset                                                     [OK]
+--------------------------------------------------------------------------------
+Stop applicable services:
+Stopping the following service(s):
+
+rh-mongodb34-mongod, postgresql, qdrouterd, qpidd, squid, pulp_celerybeat, pulp_resource_manager, pulp_streamer, pulp_workers, smart_proxy_dynflow_core, tomcat, dynflowd, httpd, puppetserver, foreman-proxy
+/ All services stopped                                                [OK]
+--------------------------------------------------------------------------------
+Extract any existing tar files in backup:
+/ Extracting pgsql data                                               [OK]
+--------------------------------------------------------------------------------
+Migrate pulp db:
+| Migrating pulp database                                             [OK]
+--------------------------------------------------------------------------------
+Start applicable services:
+Starting the following service(s):
+
+rh-mongodb34-mongod, postgresql, qdrouterd, qpidd, squid, pulp_celerybeat, pulp_resource_manager, pulp_streamer, pulp_workers, smart_proxy_dynflow_core, tomcat, dynflowd, httpd, puppetserver, foreman-proxy
+/ All services started                                                [OK]
+--------------------------------------------------------------------------------
+Run daemon reload:                                                    [OK]
+--------------------------------------------------------------------------------
+[root@satellite6 ~]# satellite-maintain health check
+Running ForemanMaintain::Scenario::FilteredScenario
+================================================================================
+Check for verifying syntax for ISP DHCP configurations:               [OK]
+--------------------------------------------------------------------------------
+Check whether all services are running:                               [OK]
+--------------------------------------------------------------------------------
+Check whether all services are running using hammer ping:             [OK]
+--------------------------------------------------------------------------------
+Check for paused tasks:                                               [OK]
+--------------------------------------------------------------------------------
+
+[root@satellite6 ~]#
