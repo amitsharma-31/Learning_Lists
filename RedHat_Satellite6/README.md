@@ -93,13 +93,14 @@ hammer -u <USER> -p <PASSWORD> subscription upload --file manifest.zip --organiz
 ID | UUID | NAME | TYPE | CONTRACT | ACCOUNT | SUPPORT | END DATE | QUANTITY | CONSUMED
 ---|------|------|------|----------|---------|---------|----------|----------|---------
 
-[root@satellite6 ~]# hammer subscription upload --file Sat6_Class_manifest.zip --organization "OpenTLC" <br>
+[root@satellite6 ~]# hammer subscription upload --file Sat6_Class_manifest.zip --organization "TEST_ORG" <br>
 warning: Overriding "Content-Type" header "multipart/form-data" with "multipart/form-data; boundary=----RubyFormBoundaryIep843W1bLNARYqJ" due to payload <br>
 [...................................................................................................................................................................] [100%] <br>
-[root@satellite6 ~]# hammer subscription list --organization OpenTLC <br>
+[root@satellite6 ~]# hammer subscription list --organization TEST_ORG <br>
 ![image](https://user-images.githubusercontent.com/42198424/88528113-d2f22380-d01b-11ea-80ba-8ed8576f2aec.png)
 
-[root@satellite6 ~]# hammer task info --id d2907880-bb5b-4854-8aad-a89dfb16ebef    (Equal to satellite dashboard monitor -> task and selecting any task for detail) <br>
+[root@satellite6 ~]# hammer task list   ##(Equal to satellite dashboard monitor -> task)
+[root@satellite6 ~]# hammer task info --id d2907880-bb5b-4854-8aad-a89dfb16ebef   ##(Equal to satellite dashboard monitor -> task and selecting any task for detail) <br>
 ID:          d2907880-bb5b-4854-8aad-a89dfb16ebef <br>
 Action:      Create organization {"text"=>"organization 'OpenTLC'", "link"=>"/organizations/1/edit"} <br>
 State:       stopped <br>
@@ -108,3 +109,49 @@ Started at:  2020/07/22 13:43:01 <br>
 Ended at:    2020/07/22 13:43:27 <br>
 Owner:       foreman_api_admin <br>
 Task errors: <br>
+
+[root@satellite6 ~]# hammer subscription refresh-manifest --organization TEST_ORG
+[root@satellite6 ~]# hammer repository list    #initiate repo list
+[root@satellite6 ~]# hammer repository synchronize --id 1 --id 2 --id 3 --organization TEST_ORG  #initiate repo sync
+
+[root@satellite6 ~]# hammer --no-headers --output yaml repository list
+---
+- Id: 3
+  Name: Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.7
+  Product: Red Hat Enterprise Linux Server
+  Content Type: yum
+  URL: https://cdn.redhat.com/content/dist/rhel/server/7/7.7/x86_64/kickstart
+- Id: 1
+  Name: Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server
+  Product: Red Hat Enterprise Linux Server
+  Content Type: yum
+  URL: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/os
+- Id: 2
+  Name: Red Hat Satellite Tools 6.5 for RHEL 7 Server RPMs x86_64
+  Product: Red Hat Enterprise Linux Server
+  Content Type: yum
+  URL: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/sat-tools/6.5/os
+
+[root@satellite6 ~]#  for i in `hammer --no-headers --output yaml repository list |grep Id |cut -d: -f2`; do
+
+## Client installation
+[root@satclient ~]# wget http://satellite6.example.com/pub/katello-ca-consumer-latest.noarch.rpm 
+[root@satclient ~]# yum -y install katello-ca-consumer-latest.noarch.rpm
+
+[root@satclient ~]# grep baseurl /etc/rhsm/rhsm.conf
+baseurl= https://satellite6.example.com/pulp/repos
+
+[root@satclient ~]# subscription-manager register --org=TEST_ORG --environment=Library
+subscription-manager list --available
+subscription-manager attach --pool 40288094737a092601737a44f75535dc
+yum clean all
+subscription-manager refresh
+subscription-manager list --consumed
+subscription-manager repos
+subscription-manager repos --enable rhel-7-server-satellite-tools-6.5-rpms
+yum search katello-agent
+yum -y install katello-agent
+katello-package-upload  ###In case katello agent status in the host->content hosts is not showing green for katello agent
+
+## Satellite Deployment Command
+satellite-installer --foreman-initial-organization TEST_ORG <br> --foreman-initial-location NCR <br> --scenario satellite <br> --foreman-proxy-tftp true <br> --foreman-proxy-dhcp true <br> --foreman-proxy-dhcp-gateway "192.168.0.2" <br> --foreman-proxy-dhcp-interface "eth0" <br> --foreman-proxy-dhcp-range "192.168.0.200 192.168.0.250" <br> --foreman-proxy-dns true <br> --foreman-proxy-dns-forwarders "192.168.0.10" <br> --foreman-proxy-dns-interface "eth0" <br> --foreman-proxy-dns-reverse 0.168.192.in-addr.arpa <br> --foreman-proxy-dns-server "127.0.0.1" <br> --foreman-proxy-dns-zone "example.com" <br> --foreman-admin-password 'redhat'
