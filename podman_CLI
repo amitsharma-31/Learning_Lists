@@ -1,0 +1,10 @@
+| CLI Description  | CLI           |
+| ---------------- | ------------- |
+| list all locally stored/available images | podman images |
+| run container with specified image with specified entry point  | podman run rhel echo "Hello World!!" |
+| start a container as a daemon or background process |  podman run -d rhscl/httpd-24-rhel7:2.4-36.8 |
+| Inspecting container and pulling networkconfiguration | podman inspect -f <container nameorid> |
+| Search images in all available/configured image registries  | podman search <imagename> | 
+| Running interactive and assign tty terminal | podman run -it <imagename> /bin/bash |
+| Passing extra variable to container |  podman run -e VAR1=test -e VAR2=test2 rhel7 printenv VAR1 VAR2 |
+| Formatted output of pods running    |  podman ps --format "{{.ID}}      {{.Image}}     {{.Names}}" |
