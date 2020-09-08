@@ -90,10 +90,10 @@ name = satclient.example.com
 
 hammer -u <USER> -p <PASSWORD> subscription upload --file manifest.zip --organization "Default_Organization"
 
-[root@satellite6 ~]# hammer subscription list --organization OpenTLC
----|------|------|------|----------|---------|---------|----------|----------|---------
+[root@satellite6 ~]# hammer subscription list --organization TEST_ORG
+`---|------|------|------|----------|---------|---------|----------|----------|---------
 ID | UUID | NAME | TYPE | CONTRACT | ACCOUNT | SUPPORT | END DATE | QUANTITY | CONSUMED
----|------|------|------|----------|---------|---------|----------|----------|---------
+---|------|------|------|----------|---------|---------|----------|----------|---------`
 
 [root@satellite6 ~]# hammer subscription upload --file Sat6_Class_manifest.zip --organization "TEST_ORG" <br>
 warning: Overriding "Content-Type" header "multipart/form-data" with "multipart/form-data; boundary=----RubyFormBoundaryIep843W1bLNARYqJ" due to payload <br>
